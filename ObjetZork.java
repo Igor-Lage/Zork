@@ -1,4 +1,7 @@
-/*
+import java.lang.InternalError;
+import java.lang.Object;
+
+/**
  *  
  * Cette classe fait partie du logiciel Zork, un jeu d'aventure simple en mode
  * texte.
@@ -11,13 +14,13 @@
  *
  */
 
-public class ObjetZork
+public class ObjetZork implements Cloneable
 {
 	private String description;
 	private int poids;
 	private boolean transportable;
 
-	/*
+	/**
 	 *
 	 * initialise un ObjetZork qui n'est pas transportable.
 	 *
@@ -31,7 +34,7 @@ public class ObjetZork
 		transportable = false;
 	}
 
-	/*
+	/**
 	 *
 	 * initialise un ObjetZork qui est transportable
 	 * si le poids est invalide, on affiche une erreur.
@@ -52,7 +55,7 @@ public class ObjetZork
 		System.out.println("erreur (poids invalide)");
 	}
 
-	/*
+	/**
 	 *
 	 * retourne le poids de l'objet ObjetZork
 	 *
@@ -64,7 +67,7 @@ public class ObjetZork
 		return poids;
 	}
 
-	/*
+	/**
 	 *
 	 * retourne la description de l'objet ObjetZork
 	 *
@@ -76,7 +79,7 @@ public class ObjetZork
 		return description;
 	}
 
-	/*
+	/**
 	 *
 	 * retourne la portabilite; de l'objet ObjetZork
 	 *
@@ -88,7 +91,7 @@ public class ObjetZork
 		return transportable;
 	}
 
-	/*
+	/**
 	 *
 	 * verifie si le poids se situe entre 0 et 200
 	 * 
@@ -135,5 +138,19 @@ public class ObjetZork
 			}
 		}
 		return false;
+	}
+
+	public Object clone() 
+	{
+		Object o = null;
+		try 
+		{
+			o = super.clone(); /* On récupère l'instance à renvoyer par l'appel de la méthode super.clone()*/
+		} 
+		catch(CloneNotSupportedException cnse)
+		{
+			throw new InternalError("...");
+		}
+		return o;
 	}
 }

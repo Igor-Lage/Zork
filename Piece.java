@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-/*
+/**
  *
  *  Une piece dans un jeu d'aventure.
  *
@@ -19,7 +19,7 @@ import java.util.ArrayList;
  *
  * @author Michael Kolling
  * @author Marc Champesme (pour la traduction francaise)
- * @version1.1
+ * @version 1.1
  * @since  August 2000
  */
 
@@ -32,7 +32,7 @@ public class Piece {
 	private int capacite; // capacite du poids total de la piece
 
 
-	/*
+	/**
 	 *  Initialise une piece decrite par la chaine de caracteres specifiee.
 	 *  Initialement, cette piece ne possede aucune sortie. La description fournie
 	 *  est une courte phrase comme "la bibliotheque" ou "la salle de TP".
@@ -45,7 +45,7 @@ public class Piece {
 		sorties = new HashMap();
 	}
 
-	/*
+	/**
 	 *  Initialise une piece decrite par la chaine de caracteres specifiee,
 	 *  contenant nbrObjet ObjetZork contenus dans listeObjet.
 	 *  Initialement, cette piece ne possede aucune sortie. La description fournie
@@ -55,15 +55,15 @@ public class Piece {
 	 * @param  listeObjet  La liste des objets de la piece.
 	 * @param  nbrObjet  Le nombre d'objets dans la piece.
 	 */
-	public Piece(String description, ArrayList <ObjetZork> listeObjet, int nbrObjet)
+	public Piece(String description, ArrayList <ObjetZork> listeObjet, int capacite)
 	{
 		this.description = description;
-		this.nbrObjet = nbrObjet;
+		this.capacite = capacite;
 		this.listeObjet =  (ArrayList <ObjetZork>) listeObjet.clone();
 		sorties = new HashMap();
 	}
 
-	/*
+	/**
 	 *  Defini les sorties de cette piece. A chaque direction correspond ou bien
 	 *  une piece ou bien la valeur null signifiant qu'il n'y a pas de sortie dans
 	 *  cette direction.
@@ -97,7 +97,7 @@ public class Piece {
 	}
 
 
-	/*
+	/**
 	 *  Renvoie la description de cette piece (i.e. la description specifiee lors
 	 *  de la creation de cette instance).
 	 *
@@ -109,7 +109,7 @@ public class Piece {
 	}
 
 
-	/*
+	/**
 	 *  Renvoie une description de cette piece mentionant ses sorties et
 	 *  directement formatee pour affichage, de la forme:
 	 *  Vous etes dans la bibliotheque.
@@ -126,7 +126,7 @@ public class Piece {
 	}
 
 
-	/*
+	/**
 	 *  Renvoie une description des sorties de cette piece, de la forme:
 	 *  Sorties: nord ouest Cette description est utilisee dans la
 	 *  description longue d'une piece.
@@ -145,7 +145,7 @@ public class Piece {
 	}
 
 
-	/*
+	/**
 	 *  Renvoie la piece atteinte lorsque l'on se deplace a partir de cette piece
 	 *  dans la direction specifiee. Si cette piece ne possede aucune sortie dans cette direction,
 	 *  renvoie null.
@@ -159,7 +159,7 @@ public class Piece {
 			return (Piece) sorties.get(direction);
 	}
 
-	/*
+	/**
 	 *  Renvoie le nombre d'occurences de l'objet dans listeObjet donne
 	 *  en argument
 	 *
@@ -180,7 +180,7 @@ public class Piece {
 		return nombreOcc;
 	}
 
-	/*
+	/**
 	 *  Verifie si le nombre d'objet du tableau depasse sa capacite.
 	 *  Ajoute l'objet et incremente le nombre d'objet.
 	 *
@@ -195,7 +195,7 @@ public class Piece {
 		}
 	}
 
-	/*
+	/**
 	 *  Supprime une instance d'ObjetZork equals a l'objet en parametre de la piece.
 	 *  Retourne true si l'objet a ete supprime
 	 *  sinon retourne false
@@ -225,7 +225,7 @@ public class Piece {
 		return false;
 	}
 
-	/*
+	/**
 	 *  Cherche si un ObjetZork specifie est dans une listeObjet.
 	 *  Renvoie true si il y est, renvoie false sinon.
 	 *
@@ -239,7 +239,7 @@ public class Piece {
 	return false ;
 	}
 
-	/*
+	/**
 	 *  Retourne la liste d'ObjetZork d'une piece
 	 *
 	 * @return La listeObjet de la piece
@@ -250,4 +250,24 @@ public class Piece {
 		TableauObjet = (ArrayList <ObjetZork>) listeObjet.clone();
 		return TableauObjet;
 	}	
+
+	public void afficherListeObjet()
+	{
+		int i;
+		ObjetZork o = new ObjetZork("o");
+		for (i=0; i<nbrObjet; i++)
+		{
+			o = listeObjet.get(i);
+			System.out.println(o.getDescription());
+		}
+		if (nbrObjet == 0)
+		{
+			System.out.println("Il n'y rien ici");
+		}
+	}
+
+	public int getNbObjets()
+	{
+		return nbrObjet;
+	}
 }
