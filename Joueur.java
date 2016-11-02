@@ -21,25 +21,6 @@ public class Joueur
 	private ArrayList<Piece> listePiece;
 
 	/**
-	 *  Initialise un joueur avec tout les arguments possibles.
-	 *
-	 * @param nom  Le nom du joueur.
-	 * @param poids  Le poids des objets portes par le joueur.
-	 * @param poidsMax  Le poids maximum portable par le joueur.
-	 * @param nbrObjets  Le nombre d'objets du joueur
-	 * @param listeObjet  La liste d'ObjetZork portes par le joueur.
-	 */
-	public Joueur( String nom, int poids, int poidsMax, int nbrObjets, ArrayList<ObjetZork> listeObjet )
-	{
-		this.nom = nom;
-		this.poids = poids;
-		this.poidsMax = poidsMax;
-		this.nbrObjets = nbrObjets;
-		this.listeObjet = (ArrayList <ObjetZork>) listeObjet.clone();
-		listePiece = new ArrayList <Piece>();
-	}
-
-	/**
 	 *  Initialise un joueur avec un nom et une capacite de poids maximale
 	 *
 	 * @param nom  Le nom du joueur.
@@ -64,7 +45,7 @@ public class Joueur
 	}
 
 	/**
-	 *  Retourne un poids porte.
+	 *  Retourne un poids porté.
 	 *
 	 * @return poids Le poids porte par le joueur.
 	 */	
@@ -74,7 +55,7 @@ public class Joueur
 	}
 
 	/**
-	 *  Retourne un poids maximumu.
+	 *  Retourne un poids maximumm.
 	 *
 	 * @return poidsMax Le poids maximum portable par le joueur
 	 */
@@ -83,6 +64,11 @@ public class Joueur
 		return poidsMax;
 	}
 
+	/**
+	 *  Retourne un nombre de pièces
+	 *
+	 * @return nbrPieces Le nombre de pièces visitées par le joueur
+	 */
 	public int getNbrPieces()
 	{
 		return nbrPieces;
@@ -110,6 +96,22 @@ public class Joueur
 		return TableauObjet;
 	}
 
+	/**
+	 *  Retourne une liste de pièces.
+	 *
+	 * @return TableauPiece L'ArrayList des pièces visitées par le joueur.
+	 */
+	public  ArrayList <Piece> getTableauPiece()
+	{
+		ArrayList <Piece> TableauPiece = new ArrayList() ;
+		TableauPiece = (ArrayList <Piece>) listePiece.clone();
+		return TableauPiece;
+	}
+
+	/**
+	 *  Affiche la liste des objets du joueur ainsi que
+	 *  leur poids total et le poids maximal portable par le joueur
+	 */
 	public void afficherListeObjet()
 	{
 		int i;
@@ -123,17 +125,17 @@ public class Joueur
 		}
 		if (getNbrObjets() == 0)
 		{
-			System.out.println("Il n'y rien ici");
+			System.out.println("Vous n'avez rien");
 		}
 	}
 
-	public  ArrayList <Piece> getTableauPiece()
-	{
-		ArrayList <Piece> TableauPiece = new ArrayList() ;
-		TableauPiece = (ArrayList <Piece>) listePiece.clone();
-		return TableauPiece;
-	}
-
+	/**
+	 *  Retire un objet du joueur, retourne true si
+	 *  ça a été possible, false sinon
+	 *
+	 * @param o l'ObjetZork qu'il faut retire du joueur
+	 * return true si le joueur a l'objet, false sinon.
+	 */
 	public boolean retirer(ObjetZork o)
 	{
 	for(int i=0; i<listeObjet.size(); i++)
@@ -149,6 +151,14 @@ public class Joueur
 	return false;
 	}
 
+	/**
+	 *  Ajoute un objet dans l'inventaire du joueur si 
+	 *  il est transportable et si le joueur peut porter
+	 *  son poids.
+	 *
+	 * @param o l'ObjetZork à ajouter
+	 * @return true si l'objet a pû être ajouté, false sinon
+	 */
 	public boolean ajouter(ObjetZork o)
 	{
 		if (o.getTransportable() == false)
@@ -173,12 +183,25 @@ public class Joueur
 		}
 	}
 
+	/**
+	 *  Ajoute une pièce dans la liste des pièces
+	 *  visitées par le joueur.
+	 *
+	 * @param p La pièce à ajouter.
+	 */
 	public void addPiece(Piece p)
 	{
 		listePiece.add(p);
 		nbrPieces ++;
 	}
 
+	/**
+	 *  Renvoie le nombre d'occurences d'un objet dans
+	 *  l'inventaire du joueur
+	 *
+	 * @param obj  L'objet que l'on cherche
+	 * @return nombreOcc  Le nombre d'occurences de obj dans l'inventaire du joueur
+	 */
 	public int contientCombienDe(ObjetZork obj)
     	{
 		int nombreOcc = 0;
@@ -192,6 +215,12 @@ public class Joueur
 		return nombreOcc;
     	}
 	
+	/**
+	 *  Renvoie un booléen indiquant si le joueur possède l'objet 
+	 *
+	 * @param o L'ObjetZork que l'on cherche
+	 * @return true si le joueur a l'objet, false sinon
+	 */
 	public boolean contient(ObjetZork o)
 	{
 		if(contientCombienDe(o)>0)
@@ -201,6 +230,12 @@ public class Joueur
 		return false ;
 	}
 
+	/**
+	 *  Teste si deux instances de Joueur sont égales
+	 *
+	 * @param o Le joueur auquel on compare
+	 * @return true si les deux instances sont égales, false sinon
+	 */
 	public boolean equals(Object o)
 	{
 		if (!(o instanceof Joueur))
@@ -212,6 +247,7 @@ public class Joueur
 		poids != (j.getPoids()) || 
 		poidsMax != (j.getPoidsMax()) ||
 		nbrObjets != (j.getNbrObjets()) || 
+		!listePiece.equals(j.getTableauPiece()) ||
 		!listeObjet.equals(j.getTableauObjet()))
 		{
 			return false;
@@ -219,11 +255,10 @@ public class Joueur
 		return true;
 	}
 
-	public Piece pieceCourante()
-	{
-		return listePiece.get(nbrPieces-1);
-	}
-
+	/**
+	 *  Affiche la liste des pièces visitées par le joueur
+	 *
+	 */
 	public void afficherListePiece()
 	{
 		int i;
@@ -240,6 +275,13 @@ public class Joueur
 		}
 	}
 
+	/**
+	 *  Enlève la dernière pièce visitée par le joueur
+	 *  de la liste des pièces visitées
+	 *
+	 * @return false si le joueur n'a visité que la pièce
+	 *  de départ, true sinon
+	 */
 	public boolean removeLastPiece()
 	{
 		if (nbrPieces > 1)
@@ -251,6 +293,13 @@ public class Joueur
 		return false;
 	}
 
+	/**
+	 *  Cherche si le joueur possède un ObjetZork nommé objet
+	 *
+	 * @param objet L'objet que l'on cherche
+	 * @return un ObjetZork nommé objet de l'inventaire du joueur ou un ObjetZork
+	 *  nommé "erreur" si ce n'est pas possible
+	 */
 	public ObjetZork chercher( String objet )
 	{
 		int i;
