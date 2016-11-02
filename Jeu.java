@@ -3,9 +3,7 @@ import java.util.ArrayList;
 /**
  *  Classe principale du jeu "Zork". <p>
  *
- *  Zork est un jeu d'aventure très rudimentaire avec une interface en mode
- *  texte: les joueurs peuvent juste se déplacer parmi les différentes pieces.
- *  Ce jeu nécessite vraiment d'etre enrichi pour devenir intéressant!</p> <p>
+ *  Zork est un jeu d'aventure 
  *
  *  Pour jouer a ce jeu, créer une instance de cette classe et appeler sa
  *  méthode "jouer". </p> <p>
@@ -49,6 +47,7 @@ public class Jeu {
 		Piece batimentC;
 		Piece burreau;
 
+		// création de tout les objets
 		ObjetZork poubelle = new ObjetZork("poubelle", 35);
 		ObjetZork detritus = new ObjetZork("détritus", 10);
 		ObjetZork voiture = new ObjetZork("voiture");
@@ -241,24 +240,40 @@ public class Jeu {
 		}
 	}
 
+	/**
+	 *  Le joueur essaie de retourner dans la dernière pièce
+	 *  qu'il a visité. Si il n'a visité que la pièce de
+	 *  départ il y reste.
+	 */
 	public void retour()
 	{
-		temps--;
 		joueur.removeLastPiece();
 		Piece pieceSuivante = (joueur.getTableauPiece()).get(joueur.getNbrPieces()-1);
+		if (pieceCourante != pieceSuivante)
+		{
+			temps++;
+		}
 		pieceCourante = pieceSuivante;
 		System.out.println(pieceCourante.descriptionLongue());
 	}
 
+	/**
+	 *  Le joueur essaie de prendre un objet nommé objet.
+	 *  Si la pièce a l'objet et le joueur peut le porter
+	 *  retourne true, retour false sinon
+	 *
+	 * @param objet  L'objet à prendre
+	 * @return true  si l'objet a pû être pris, false sinon
+	 */
 	public boolean prendre(String objet)
 	{
 		ObjetZork test = new ObjetZork("erreur");
-		if (test.equals( pieceCourante.chercher(objet)))
+		if (test.equals( pieceCourante.chercher(objet))) // Si l'a pièce n'a pas l'objet, chercher renvoie l'ObjetZork ("erreur")
 		{
 			return false ;
 		}
 		test = pieceCourante.chercher(objet);
-		if(joueur.ajouter(test))
+		if(joueur.ajouter(test)) // Si on pû ajouter l'objet à l'inventaire du joueur
 		{
 			pieceCourante.retirer(test);
 		
@@ -267,15 +282,23 @@ public class Jeu {
 		return false ;
 	}
 
+	/**
+	 *  Le joueur essaie de poser un objet nommé objet.
+	 *  Si le joueur a l'objet et la pièce peut le contenir
+	 *  retourne true, retour false sinon
+	 *
+	 * @param objet  L'objet à poser
+	 * @return true  si l'objet a pû être posé, false sinon
+	 */
 	public boolean poser(String objet)
 	{
 		ObjetZork test = new ObjetZork("erreur");
-		if (test.equals( joueur.chercher(objet)))
+		if (test.equals( joueur.chercher(objet))) // Si le joueur n'a pas l'objet, chercher renvoie l'ObjetZork ("erreur")
 		{
 			return false ;
 		}
 		test = joueur.chercher(objet);
-		if (pieceCourante.ajouter(test))
+		if (pieceCourante.ajouter(test)) // Si on pû ajouter l'objet à la pièce
 		{
 			joueur.retirer(test);
 			return true;
@@ -283,6 +306,9 @@ public class Jeu {
 		return false ;
 	}
 
+	/**
+	 *  Affiche le temps restant avant la fin du jeu
+	 */
 	public void afficherTemps()
 	{
 		System.out.println("Il vous reste " +temps +" minutes");
