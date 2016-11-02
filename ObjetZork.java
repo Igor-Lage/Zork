@@ -80,7 +80,7 @@ public class ObjetZork implements Cloneable
 
 	/**
 	 *
-	 * retourne la portabilite; de l'objet ObjetZork
+	 * retourne la portabilite de l'objet ObjetZork
 	 *
 	 * @return true si l'objet est transportable
 	 *
@@ -92,10 +92,10 @@ public class ObjetZork implements Cloneable
 
 	/**
 	 *
-	 * verifie si le poids se situe entre 0 et 200
+	 * verifie si le poids est positif
 	 * 
 	 * @param poids le poids d'un objet
-	 * @return true si le poids est valide (entre 0 et 200)
+	 * @return true si le poids est valide (au dessus de 0)
 	 *
 	 */
 	public boolean checkPoids(int poids)
@@ -139,6 +139,14 @@ public class ObjetZork implements Cloneable
 		return false;
 	}
 
+	/**
+	 *
+	 *  implémentation de la méthode clone pour les ObjetZork
+	 *
+	 *
+	 * @return un clone de l'objet si il s'agit bien d'un ObjetZork
+	 *
+	 */
 	public Object clone() 
 	{
 		Object o = null;
