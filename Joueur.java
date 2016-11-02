@@ -50,6 +50,7 @@ public class Joueur
 		this.nom = nom;
 		this.poidsMax = poidsMax;
 		listePiece = new ArrayList <Piece>();
+		listeObjet = new ArrayList <ObjetZork>();
 	}
 
 	/**
@@ -109,6 +110,23 @@ public class Joueur
 		return TableauObjet;
 	}
 
+	public void afficherListeObjet()
+	{
+		int i;
+		ObjetZork o = new ObjetZork("o");
+		ArrayList <ObjetZork>test = (ArrayList <ObjetZork>)listeObjet.clone();
+		System.out.println("Poids :" +getPoids() +"/" +getPoidsMax());
+		for (i=0; i<getNbrObjets(); i++)
+		{
+			o = test.get(i);
+			System.out.println(o.getDescription() +"\t" +o.getPoids());
+		}
+		if (getNbrObjets() == 0)
+		{
+			System.out.println("Il n'y rien ici");
+		}
+	}
+
 	public  ArrayList <Piece> getTableauPiece()
 	{
 		ArrayList <Piece> TableauPiece = new ArrayList() ;
@@ -122,25 +140,37 @@ public class Joueur
 	{
 		if((listeObjet.get(i)).equals(o))
 		{
-			if((nbrObjets-1) != i)
-			{
-				listeObjet.remove(listeObjet.get(listeObjet.size()-1));
-			}
-			else
-			{
-				listeObjet.set(i, null);
-			}
+			listeObjet.remove(listeObjet.get(i));
 			nbrObjets --;
+			poids -= o.getPoids();
 			return true;
 		}
 	}
 	return false;
 	}
 
-	public void ajouter(ObjetZork o)
+	public boolean ajouter(ObjetZork o)
 	{
-		listeObjet.add(o);
-		nbrObjets ++;
+		if (o.getTransportable() == false)
+		{
+			System.out.println("Vous ne pouvez pas prendre ça");
+			return false;
+		}
+		else
+		{
+			if ((poids + o.getPoids()) < poidsMax)
+			{
+				listeObjet.add(o);
+				nbrObjets ++;
+				poids += o.getPoids();
+				return true ;
+			}
+			else
+			{
+				System.out.println("Cet objet est trop lourd à porter");
+				return false;
+			}
+		}
 	}
 
 	public void addPiece(Piece p)
@@ -197,10 +227,10 @@ public class Joueur
 	public void afficherListePiece()
 	{
 		int i;
-		Piece p = new Piece("p");
+		Piece p = new Piece("p", 0);
+		ArrayList <Piece>test = (ArrayList <Piece>)listePiece.clone();
 		for (i=0; i<getNbrPieces(); i++)
 		{
-			ArrayList <Piece>test = (ArrayList <Piece>)listePiece.clone();
 			p = test.get(i);
 			System.out.println(p.descriptionCourte());
 		}
@@ -221,10 +251,17 @@ public class Joueur
 		return false;
 	}
 
-	public boolean prendre(String objet)
+	public ObjetZork chercher( String objet )
 	{
-		String test = objet;
-		ArrayList <ObjetZork> contenu = pieceCourante().getTableauObjet();
-		return true;
+		int i;
+		for(i = 0; i < nbrObjets; i++)
+		{
+			if (((listeObjet.get(i)).getDescription()).equals(objet))
+			{
+				return listeObjet.get(i);
+			}
+		}
+		System.out.println("Vous n'avez pas cet objet");
+		return new ObjetZork( "erreur");
 	}
 }

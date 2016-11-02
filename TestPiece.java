@@ -68,9 +68,9 @@ public class TestPiece {
         boolean retVal;
         
         // Initialisation données tests
-        Piece p1 = new Piece("Chambre");        
-        Piece p2 = new Piece("Cuisine");
-        Piece p3 = new Piece("Salon");
+        Piece p1 = new Piece("Chambre", 10);        
+        Piece p2 = new Piece("Cuisine", 10);
+        Piece p3 = new Piece("Salon", 10);
         ObjetZork oz1 = new ObjetZork("Parchemin", 1);
         ObjetZork oz2 = new ObjetZork("Tapis", 10);
         ObjetZork oz3 = new ObjetZork("Tapis", 10);
@@ -166,7 +166,7 @@ public class TestPiece {
 	List<Piece> lPieces = new ArrayList<Piece>(nbPieces);
 	Collections.shuffle(lOz);
 	for (int i = 0; i < nbPieces; i++) {
-		Piece p = new Piece("piece" + i);
+		Piece p = new Piece("piece" + i, 10);
 		int nbOz = randomGenerator.nextInt(lOz.size());
 		// System.out.println("Ajout de " + nbOz + " objets à la pièce: " + p);
 		for (int j = 0; j < nbOz; j++) {

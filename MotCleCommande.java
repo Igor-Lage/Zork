@@ -18,7 +18,7 @@ public class MotCleCommande {
 	/**
 	 *  Un tableau constant contenant tous les mots-clé valides comme commandes.
 	 */
-	private final static String commandesValides[] = {"aller", "quitter", "aide", "fouiller", "retour", "trajet", "prendre"};
+	private final static String commandesValides[] = {"aller", "quitter", "aide", "fouiller", "retour", "trajet", "prendre", "inventaire", "poser", "temps"};
 
 
 	/**

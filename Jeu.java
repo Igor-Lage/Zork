@@ -25,6 +25,7 @@ public class Jeu {
 	private AnalyseurSyntaxique analyseurSyntaxique;
 	private Piece pieceCourante;
 	private Joueur joueur;
+	private int temps;
 
 	/**
 	 *  Crée le jeu et initialise la carte du jeu (i.e. les pièces).
@@ -34,6 +35,7 @@ public class Jeu {
 		analyseurSyntaxique = new AnalyseurSyntaxique();
 		joueur = new Joueur("Igor", 40);
 		joueur.addPiece(pieceCourante);
+		temps = 2;
 	}
 
 
@@ -47,18 +49,19 @@ public class Jeu {
 		Piece batimentC;
 		Piece burreau;
 
-		ObjetZork poubelle = new ObjetZork("poubelle");
-		ObjetZork detritus = new ObjetZork("détritus");
-		ArrayList <ObjetZork> listedehors = new ArrayList(2);
+		ObjetZork poubelle = new ObjetZork("poubelle", 35);
+		ObjetZork detritus = new ObjetZork("détritus", 10);
+		ObjetZork voiture = new ObjetZork("voiture");
 
 		// création des pieces
-		dehors = new Piece("devant le batiment C",listedehors,2);
-		salleTD = new Piece("une salle de TD dans le batiment G");
-		taverne = new Piece("la taverne");
-		batimentC = new Piece("le batiment C");
-		burreau = new Piece("le secrétariat");
+		dehors = new Piece("devant le batiment C", 30);
+		salleTD = new Piece("une salle de TD dans le batiment G", 6);
+		taverne = new Piece("la taverne", 10);
+		batimentC = new Piece("le batiment C", 20);
+		burreau = new Piece("le secrétariat", 0);
 		dehors.ajouter(poubelle);
 		dehors.ajouter(detritus);
+		dehors.ajouter(voiture);
 
 
 		// initialise les sorties des pieces
@@ -84,10 +87,18 @@ public class Jeu {
 		// ce que la commande choisie soit la commande "quitter"
 		boolean termine = false;
 		while (!termine) {
-			Commande commande = analyseurSyntaxique.getCommande();
-			termine = traiterCommande(commande);
+			if (temps == 0)
+			{
+				System.out.println("Vous n'avez plus de temps");
+				break;
+			}
+			else
+			{
+				Commande commande = analyseurSyntaxique.getCommande();
+				termine = traiterCommande(commande);
+			}
 		}
-		System.out.println("Merci d'avoir jouer.  Au revoir.");
+		System.out.println("Merci d'avoir joué.  Au revoir.");
 	}
 
 
@@ -97,7 +108,7 @@ public class Jeu {
 	public void afficherMsgBienvennue() {
 		System.out.println();
 		System.out.println("Bienvennue dans le monde de Zork !");
-		System.out.println("Zork est un nouveau jeu d'aventure, terriblement enuyeux.");
+		System.out.println("Zork est un nouveau jeu d'aventure.");
 		System.out.println("Tapez 'aide' si vous avez besoin d'aide.");
 		System.out.println();
 		System.out.println(pieceCourante.descriptionLongue());
@@ -124,7 +135,14 @@ public class Jeu {
 		} 
 		else if (motCommande.equals("aller")) 
 		{
-			deplacerVersAutrePiece(commande);
+			if(!commande.aSecondMot())
+			{
+				System.out.println("Aller où ?");
+			}
+			else
+			{
+				deplacerVersAutrePiece(commande);
+			}
 		} 
 		else if (motCommande.equals("quitter"))
 		{
@@ -156,8 +174,27 @@ public class Jeu {
 			}
 			else
 			{
-				joueur.prendre(commande.getSecondMot());
+				prendre(commande.getSecondMot());
 			}
+		}
+		else if (motCommande.equals("poser"))
+		{
+			if(!commande.aSecondMot())
+			{
+				System.out.println("Poser quoi?");
+			}
+			else
+			{
+				poser(commande.getSecondMot());
+			}
+		}
+		else if (motCommande.equals("inventaire"))
+		{
+			joueur.afficherListeObjet();
+		}
+		else if (motCommande.equals("temps"))
+		{
+			afficherTemps();
 		}
 		return false;
 	}
@@ -186,14 +223,8 @@ public class Jeu {
 	 * @param  commande  Commande dont le second mot spécifie la direction a suivre
 	 */
 	public void deplacerVersAutrePiece(Commande commande) {
-		if (!commande.aSecondMot()) {
-			// si la commande ne contient pas de second mot, nous ne
-			// savons pas ou aller..
-			System.out.println("Aller où ?");
-			return;
-		}
-
 		String direction = commande.getSecondMot();
+		temps -- ;
 
 		// Tentative d'aller dans la direction indiquée.
 		Piece pieceSuivante = pieceCourante.pieceSuivante(direction);
@@ -212,10 +243,49 @@ public class Jeu {
 
 	public void retour()
 	{
+		temps--;
 		joueur.removeLastPiece();
 		Piece pieceSuivante = (joueur.getTableauPiece()).get(joueur.getNbrPieces()-1);
 		pieceCourante = pieceSuivante;
 		System.out.println(pieceCourante.descriptionLongue());
+	}
+
+	public boolean prendre(String objet)
+	{
+		ObjetZork test = new ObjetZork("erreur");
+		if (test.equals( pieceCourante.chercher(objet)))
+		{
+			return false ;
+		}
+		test = pieceCourante.chercher(objet);
+		if(joueur.ajouter(test))
+		{
+			pieceCourante.retirer(test);
+		
+		return true;
+		}
+		return false ;
+	}
+
+	public boolean poser(String objet)
+	{
+		ObjetZork test = new ObjetZork("erreur");
+		if (test.equals( joueur.chercher(objet)))
+		{
+			return false ;
+		}
+		test = joueur.chercher(objet);
+		if (pieceCourante.ajouter(test))
+		{
+			joueur.retirer(test);
+			return true;
+		}
+		return false ;
+	}
+
+	public void afficherTemps()
+	{
+		System.out.println("Il vous reste " +temps +" minutes");
 	}
 }
 

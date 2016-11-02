@@ -39,10 +39,12 @@ public class Piece {
 	 *
 	 * @param  description  Description de la piece.
 	 */
-	public Piece(String description) 
+	public Piece(String description, int capacite) 
 	{
 		this.description = description;
+		this.capacite = capacite;
 		sorties = new HashMap();
+		listeObjet = new ArrayList <ObjetZork>();
 	}
 
 	/**
@@ -61,6 +63,11 @@ public class Piece {
 		this.capacite = capacite;
 		this.listeObjet =  (ArrayList <ObjetZork>) listeObjet.clone();
 		sorties = new HashMap();
+	}
+
+	public int getCapacite()
+	{
+		return capacite;
 	}
 
 	/**
@@ -186,12 +193,18 @@ public class Piece {
 	 *
 	 * @param o objet a ajouter dans le tableau
 	 */
-	public void ajouter(ObjetZork o)
+	public boolean ajouter(ObjetZork o)
 	{
 		if(nbrObjet < capacite)
 		{
 			listeObjet.add(o);
 			nbrObjet ++;
+			return true;
+		}
+		else
+		{
+			System.out.println("La pièce est pleine");
+			return false;
 		}
 	}
 
@@ -210,15 +223,8 @@ public class Piece {
 		{
 			if((listeObjet.get(i)).equals(o))
 			{
-				if((nbrObjet-1) != i)
-				{
-					listeObjet.remove(listeObjet.get(listeObjet.size()-1));
-				}
-				else
-				{
-					listeObjet.set(i, null);
-				}
-				nbrObjet --;
+				nbrObjet -- ;
+				listeObjet.remove(listeObjet.get(i));
 				return true;
 			}
 		}
@@ -239,6 +245,20 @@ public class Piece {
 	return false ;
 	}
 
+	public ObjetZork chercher( String objet )
+	{
+		int i;
+		for(i = 0; i < nbrObjet; i++)
+		{
+			if (((listeObjet.get(i)).getDescription()).equals(objet))
+			{
+				return listeObjet.get(i);
+			}
+		}
+		System.out.println("L'objet n'est pas dans la pièce");
+		return new ObjetZork( "erreur");
+	}
+		
 	/**
 	 *  Retourne la liste d'ObjetZork d'une piece
 	 *
@@ -255,10 +275,18 @@ public class Piece {
 	{
 		int i;
 		ObjetZork o = new ObjetZork("o");
+		System.out.println("Contient :" +getNbObjets() +"/" +getCapacite());
 		for (i=0; i<nbrObjet; i++)
 		{
 			o = listeObjet.get(i);
-			System.out.println(o.getDescription());
+			if( o.getTransportable() == false )
+			{
+				System.out.println(o.getDescription() +"\t\tNon transportable");
+			}
+			else
+			{
+				System.out.println(o.getDescription() +"\t" +o.getPoids());
+			}
 		}
 		if (nbrObjet == 0)
 		{

@@ -30,7 +30,6 @@ public class ObjetZork implements Cloneable
 	public ObjetZork(String description)
 	{
 		this.description = description;
-		poids = 0;
 		transportable = false;
 	}
 
@@ -101,7 +100,7 @@ public class ObjetZork implements Cloneable
 	 */
 	public boolean checkPoids(int poids)
 	{
-		if(poids < 0 && poids > 200)
+		if(poids < 0)
 		{
 			return false;
 		}
